@@ -1,0 +1,22 @@
+= Gradle项目模板
+xiayx <xiayouxue@hotmail.com>
+v1.0, 2019-08-23: SNAPSHOT
+:doctype: docbook
+:toc: left
+:numbered:
+:imagesdir: docs/assets/images
+:sourcedir: src/main/java
+:resourcesdir: src/main/resources
+:testsourcedir: src/test/java
+:source-highlighter: highlightjs
+
+一个基于Gradle的项目模板。
+包含以下内容：
+
+* 基于 gradle-5.4.1 的环境
+* 基于 spring-boot-dependencies:1.5.20.RELEASE 的依赖版本管理
+* 基于 peacetrue-dependencies:1.0-SNAPSHOT 的依赖版本管理
+* 在本地配置 ossrhUsername 和 ossrhPassword 后，可以发布代码到 maven-central
+* 一个``com.github.peacetrue.Placeholder``的空类
+* 一个``docs/README.graffle``的设计图表
+* 一个符合 https://antora.org[antora^] 要求的文档结构
