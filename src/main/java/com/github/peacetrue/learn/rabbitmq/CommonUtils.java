@@ -19,6 +19,7 @@ public class CommonUtils {
         factory.setUsername("root");
         factory.setPassword("root123");
         factory.setVirtualHost("/");
+        factory.setRequestedHeartbeat(Integer.MAX_VALUE);
         return factory;
     }
 
