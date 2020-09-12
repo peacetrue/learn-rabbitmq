@@ -5,15 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 @Slf4j
 public class Receiver {
 
+    public final static ExecutorService executor = Executors.newCachedThreadPool();
+
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = CommonUtils.getConnectionFactory();
-        main(factory);
-        //独占队列，不能在多个连接间使用
         main(factory);
     }
 
@@ -35,22 +38,27 @@ public class Receiver {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, StandardCharsets.UTF_8);
                 log.info("Received-1 '{}'", message);
-                //ack 不确认，只能收到 2 条消息
-                channel.basicAck(envelope.getDeliveryTag(), false);
-                log.info("finished-1 '{}'", message);
+
+                CompletableFuture.runAsync(() -> {
+                    log.info("异步处理");
+                }, executor)
+                        .whenCompleteAsync((aVoid, throwable) -> {
+                            try {
+                                if (throwable != null) {
+                                    channel.basicNack(envelope.getDeliveryTag(), false, true);
+                                } else {
+                                    //ack 不确认，只能收到 2 条消息
+                                    channel.basicAck(envelope.getDeliveryTag(), false);
+                                    log.info("finished-1 '{}'", message);
+                                }
+                            } catch (IOException ignored) {
+                                //异常咋办
+                            }
+                        });
             }
         });
 
-        channel.basicConsume(CommonUtils.DEMO_QUEUE_NAME, false, new DefaultConsumer(channel) {
-            //上面那个消费者接收 2 个之后，都往这发
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                String message = new String(body, StandardCharsets.UTF_8);
-                log.info("Received-2 '{}'", message);
-                //ack 不确认，只能收到 2 条消息
-                channel.basicAck(envelope.getDeliveryTag(), false);
-                log.info("finished-2 '{}'", message);
-            }
-        });
+        channel.queueDeclare(CommonUtils.DEMO_QUEUE_NAME + "3", true, true, true, null);
     }
 
 
