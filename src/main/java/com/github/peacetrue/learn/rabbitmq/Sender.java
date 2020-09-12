@@ -1,6 +1,6 @@
 package com.github.peacetrue.learn.rabbitmq;
-//In Send.java, we need some classes imported:
 
+import com.github.peacetrue.spring.util.BeanUtils;
 import com.rabbitmq.client.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,14 +16,18 @@ public class Sender {
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = CommonUtils.getConnectionFactory();
         try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
-            //声明持久化自动删除交换机，从管理界面可以看到交换机存在
-            //使用 Receiver 连上交换机，然后再断开，从管理界面再看交换机，就不存在了
             channel.exchangeDeclare(CommonUtils.DEMO_EXCHANGE_NAME, BuiltinExchangeType.TOPIC, true, true, null);
+            //路由不到匹配队列
+            channel.addReturnListener(returnMessage -> {
+                log.info("returnMessage:[{}]", BeanUtils.map(returnMessage));
+            });
             while (true) {
                 log.info("Waiting for message: ");
                 String message = new BufferedReader(new InputStreamReader(System.in)).readLine();
                 channel.basicPublish(CommonUtils.DEMO_EXCHANGE_NAME,
                         CommonUtils.DEMO_ROUTINGKEY_NAME,
+//                        CommonUtils.DEMO_ROUTINGKEY_NAME + ".cannot-route",
+                        true,
                         MessageProperties.PERSISTENT_TEXT_PLAIN,
                         message.getBytes());
                 log.info("Sent '{}'", message);

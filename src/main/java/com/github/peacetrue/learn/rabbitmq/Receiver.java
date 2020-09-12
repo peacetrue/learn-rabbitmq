@@ -38,7 +38,7 @@ public class Receiver {
                 String message = new String(body, StandardCharsets.UTF_8);
                 log.info("Received-1 '{}'", message);
                 //重入队列，没有其他消费者，死循环
-                channel.basicNack(envelope.getDeliveryTag(), false, true);
+                channel.basicAck(envelope.getDeliveryTag(), false);
             }
         });
 

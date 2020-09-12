@@ -44,6 +44,8 @@ allprojects { project ->
         annotationProcessor "org.projectlombok:lombok"
         implementation "com.google.code.findbugs:jsr305"
         implementation "com.rabbitmq:amqp-client"
+        implementation "org.springframework:spring-beans"
+        implementation "com.github.peacetrue:peacetrue-spring"
         implementation "org.springframework.boot:spring-boot-starter-logging"
 
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
