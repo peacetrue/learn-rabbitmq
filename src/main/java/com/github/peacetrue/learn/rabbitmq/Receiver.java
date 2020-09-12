@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
@@ -38,23 +37,8 @@ public class Receiver {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, StandardCharsets.UTF_8);
                 log.info("Received-1 '{}'", message);
-
-                CompletableFuture.runAsync(() -> {
-                    log.info("异步处理");
-                }, executor)
-                        .whenCompleteAsync((aVoid, throwable) -> {
-                            try {
-                                if (throwable != null) {
-                                    channel.basicNack(envelope.getDeliveryTag(), false, true);
-                                } else {
-                                    //ack 不确认，只能收到 2 条消息
-                                    channel.basicAck(envelope.getDeliveryTag(), false);
-                                    log.info("finished-1 '{}'", message);
-                                }
-                            } catch (IOException ignored) {
-                                //异常咋办
-                            }
-                        });
+                //重入队列，没有其他消费者，死循环
+                channel.basicNack(envelope.getDeliveryTag(), false, true);
             }
         });
 
