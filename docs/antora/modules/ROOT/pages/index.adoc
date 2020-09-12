@@ -1,4 +1,56 @@
 = 简介
 
+本文对照官网文档 https://www.rabbitmq.com/[rabbitmq^]（链接被丢失）。
+
+RabbitMQ是部署最广泛的开源消息代理。
+
+RabbitMQ拥有数万用户，是最受欢迎的开源消息代理商之一。从T-Mobile到Runtastic，RabbitMQ在全球小型创业公司和大型企业中使用。
+
+RabbitMQ轻量级，易于在内部和云中部署。它支持多种消息传递协议。 RabbitMQ可以部署在分布式和联合配置中，以满足高规模，高可用性要求。
+
+RabbitMQ可在许多操作系统和云环境中运行，并为大多数流行语言提供各种开发人员工具。
+
+== 特性
+
+=== 异步消息
+
+异步消息支持多种消息传递协议，消息队列，传递确认，到队列的灵活路由，多种交换类型。
+
+=== 开发经验
+
+与BOSH，Chef，Docker和Puppet一起部署。使用喜欢的编程语言开发跨语言消息，例如：Java，.NET，PHP，Python，JavaScript，Ruby，Go等等。
+
+=== 分布式部署
+
+部署为集群以实现高可用性和吞吐量; 联合多个可用区和区域。
+
+== 入门
+
+=== 下载和安装
+
+流行的操作系统和语言的服务器和客户端
+
+=== RabbitMQ教程
+
+动手实例，帮助您开始使用RabbitMQ
+
+== RabbitMQ商业服务
+
+=== 商业发行
+
+Pivotal Software生产名为Pivotal RabbitMQ的商业发行版，以及在Pivotal Cloud Foundry中部署的版本。 这些发行版包括开源版本的所有功能，RabbitMQ for Pivotal Cloud Foundry提供了一些额外的管理功能。支持协议是商业许可的一部分。
+
+=== 支持+托管
+
+Pivotal Software为开源RabbitMQ提供支持，可以订阅费用。 以下公司提供开源RabbitMQ的技术支持和/或云托管：CloudAMQP，Erlang解决方案，Visual Integrator，Inc和Google Cloud Platform。 RabbitMQ也可以部署在AWS和Microsoft Azure中。
+
+=== 培训
+
+以下公司为RabbitMQ提供免费，虚拟或讲师指导的课程：Pivotal Software，Erlang Solutions，Visual Integrator，Inc和LearnQuest。
+
+
+
+
+
 
 

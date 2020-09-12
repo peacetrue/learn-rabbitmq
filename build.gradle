@@ -1,132 +1,71 @@
-plugins {
-    id "maven-publish"
-    id "signing"
-    id "idea"
-    id "org.springframework.boot" version "1.5.20.RELEASE" apply(false)
-    id "java-library"
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url 'https://repo.spring.io/plugins-release' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.3.3.RELEASE"
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.5.0"
+    }
 }
 
-allprojects {
+allprojects { project ->
+
+    group "com.github.peacetrue.learn"
+    version "1.0.0-SNAPSHOT"
+    description "学习 rabbitmq"
+
+    apply plugin: "java-library"
+    sourceCompatibility = 9
+    targetCompatibility = 9
+
     repositories {
+        mavenLocal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://repo.spring.io/plugins-release" }
         mavenCentral()
     }
-}
-
-subprojects { project ->
 
     apply plugin: "io.spring.dependency-management"
+    apply plugin: 'org.springframework.boot'
     dependencyManagement {
         imports {
-            mavenBom "org.springframework.boot:spring-boot-dependencies:1.5.20.RELEASE"
-            mavenBom "com.github.peacetrue:peacetrue-dependencies:1.0.4-SNAPSHOT"
+            mavenBom "com.github.peacetrue:peacetrue-dependencies:2.0.0-SNAPSHOT"
         }
     }
-
-    group "com.github.peacetrue.template"
-    version "1.0-SNAPSHOT"
-    description "gradle模板"
-
-    apply plugin: "java"
-    apply plugin: "java-library"
-    sourceCompatibility = 1.8
-
-/*
-    compileJava {
-        doLast {
-            delete {
-                delete("${rootDir.path}/docs/antora/modules/ROOT/examples/source/${name}")
-            }
-            copy {
-                from sourceSets.test.allSource.filter({ it.name.endsWith(".java") })
-                into("${rootDir.path}/docs/antora/modules/ROOT/examples/source/${name}")
-            }
-        }
-    }
-*/
 
     dependencies {
         compileOnly "org.projectlombok:lombok"
         annotationProcessor "org.projectlombok:lombok"
-        implementation("com.google.code.findbugs:jsr305")
+        implementation "com.google.code.findbugs:jsr305"
+        implementation "com.rabbitmq:amqp-client"
+        implementation "org.springframework.boot:spring-boot-starter-logging"
 
-        testImplementation "junit:junit"
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+
         testCompileOnly "org.projectlombok:lombok"
         testAnnotationProcessor "org.projectlombok:lombok"
         testImplementation "ch.qos.logback:logback-classic"
-    }
-
-    if (name.endsWith("sample") || name.endsWith("ui")) return
-
-    task sourcesJar(type: Jar) {
-        archiveClassifier = "sources"
-        from sourceSets.main.allJava
-    }
-
-    task javadocJar(type: Jar) {
-        archiveClassifier = "javadoc"
-        from javadoc.destinationDir
-    }
-
-    def repository_snapshots = "https://oss.sonatype.org/content/repositories/snapshots/"
-    def repository_releases = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-
-    apply plugin: "maven-publish"
-    apply plugin: "signing"
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                pom {
-                    name = project.name
-                    description = project.description
-                    url = "https://github.com/peacetrue/${project.name}"
-                    licenses {
-                        license {
-                            name = "The Apache License, Version 2.0"
-                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "xiayouxue"
-                            name = "xiayouxue"
-                            email = "xiayouxue@hotmail.com"
-                        }
-                    }
-                    scm {
-                        connection = "https://github.com/peacetrue/${project.name}.git"
-                        developerConnection = "https://github.com/peacetrue/${project.name}.git"
-                        url = "https://github.com/peacetrue/peacetrue/${project.name}"
-                    }
-                }
-
-                from components.java
-
-                artifact sourcesJar
-                artifact javadocJar
-            }
-        }
-
-        repositories {
-            maven {
-                url version.endsWith("SNAPSHOT") ? repository_snapshots : repository_releases
-                credentials {
-                    username = ossrhUsername
-                    password = ossrhPassword
-                }
-            }
+        testImplementation 'io.projectreactor:reactor-test'
+        testImplementation 'org.unitils:unitils-core'
+        testImplementation 'org.jeasy:easy-random-core'
+        testImplementation 'org.yaml:snakeyaml'
+        testImplementation 'org.jeasy:easy-random-bean-validation', {
+            exclude('group': 'org.yaml')
         }
     }
 
-    signing {
-        sign publishing.publications.mavenJava
+    test {
+        useJUnitPlatform()
     }
 
 }
-
-
-
-
-
-
-

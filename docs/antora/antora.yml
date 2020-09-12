@@ -1,5 +1,5 @@
-name: peacetrue-template-gradle
-title: gradle 模板
+name: learn-rabbitmq
+title: 学习 rabbitmq
 version: master
 start_page: ROOT:index.adoc
 nav:

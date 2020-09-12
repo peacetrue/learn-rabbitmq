@@ -1,1 +1,5 @@
 * xref:index.adoc[简介]
+* xref:install/homebrew.adoc[安装-mac homebrew]
+* java相关教程
+** xref:tutorials/hello-world.adoc[hello world]
+
