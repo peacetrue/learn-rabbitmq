@@ -16,7 +16,7 @@ public class Receiver {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
         channel.queueDeclare(CommonUtils.DEMO_QUEUE_NAME, true, false, false, null);
-        channel.queueBind(CommonUtils.DEMO_QUEUE_NAME, CommonUtils.DEMO_EXCHANGE_NAME, CommonUtils.DEMO_ROUTINGKEY_NAME);
+        channel.queueBind(CommonUtils.DEMO_QUEUE_NAME, CommonUtils.DEMO_EXCHANGE_NAME, CommonUtils.DEMO_BINDINGKEY_NAME);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         channel.basicConsume(CommonUtils.DEMO_QUEUE_NAME, new DefaultConsumer(channel) {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
