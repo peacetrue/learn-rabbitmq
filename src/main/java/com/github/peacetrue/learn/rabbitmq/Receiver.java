@@ -38,11 +38,9 @@ public class Receiver {
                 String message = new String(body, StandardCharsets.UTF_8);
                 log.info("Received-1 '{}'", message);
                 //重入队列，没有其他消费者，死循环
-                channel.basicAck(envelope.getDeliveryTag(), false);
+                channel.basicAck(envelope.getDeliveryTag(), true);
             }
         });
-
-        channel.queueDeclare(CommonUtils.DEMO_QUEUE_NAME + "3", true, true, true, null);
     }
 
 
