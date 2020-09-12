@@ -8,10 +8,12 @@ import com.rabbitmq.client.ConnectionFactory;
  **/
 public class CommonUtils {
 
-    public final static String DEMO_QUEUE_NAME = "queue-demo3";
-    public final static String DEMO_EXCHANGE_NAME = "exchange-demo3";
+    public final static String DEMO_EXCHANGE_NAME = "exchange-demo4";
+    public final static String DEMO_QUEUE_NAME = "queue-demo4";
     public final static String DEMO_BINDINGKEY_NAME = "com.#.peacetrue";
     public final static String DEMO_ROUTINGKEY_NAME = "com.peacetrue";
+    public final static String AE_EXCHANGE_NAME = "exchange-AE";
+    public final static String AE_QUEUE_NAME = "queue-AE";
 
     public static ConnectionFactory getConnectionFactory() {
         ConnectionFactory factory = new ConnectionFactory();
